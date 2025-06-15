@@ -1,6 +1,7 @@
 import os
 import sys
 from PIL import Image
+import sys
 
 def write_list_to_txt(list_to_save:list, filename:str):
     with open(f'{filename}.txt', 'w') as f:
@@ -17,7 +18,8 @@ def get_img_paths(drive_path:str) -> (list, list):
         for file in files:
             full_path = os.path.join(root,file)
             try:
-                if not file.startswith('.') and file.endswith(formats):
+                condition = ('Macintosh SSD' in full_path or 'Macintosh HDD' in full_path) and 'Users' in full_path
+                if not file.startswith('.') and condition and file.endswith(formats):
                     list_img_paths.append(full_path)
             except:
                 list_errors.append(full_path)
@@ -39,3 +41,11 @@ def get_valid_paths(list_img_paths:list) -> (list, list, list):
             list_errors.append(path)
     return list_valid_paths, list_rejected_paths, list_errors
 
+
+if __name__ == '__main__':
+    img_path_list, errors_list = get_img_paths(sys.argv[1])
+    valid, rejected, errors = get_valid_paths(img_path_list)
+    write_list_to_txt(valid, 'valid')
+    write_list_to_txt(rejected, 'rejected')
+    write_list_to_txt(errors, 'errors')
+    
