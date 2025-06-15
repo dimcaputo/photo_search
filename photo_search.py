@@ -2,7 +2,14 @@ import os
 import sys
 from PIL import Image
 
-def get_img_paths(drive_path:str) -> (list, list, float):
+def write_list_to_txt(list_to_save:list, filename:str):
+    with open(f'{filename}.txt', 'w') as f:
+        for item in list_to_save:
+            f.write(item)
+            f.write('\n')
+
+
+def get_img_paths(drive_path:str) -> (list, list):
     list_img_paths = []
     list_errors = []
     formats = ('.jpg', '.jpeg', '.png', '.tiff', '.raw', '.heif', '.dng', '.bmp', '.webp', '.psd')
@@ -14,7 +21,7 @@ def get_img_paths(drive_path:str) -> (list, list, float):
                     list_img_paths.append(full_path)
             except:
                 list_errors.append(full_path)
-    return list_img_paths, list_errors, stop-start
+    return list_img_paths, list_errors
 
 def get_valid_paths(list_img_paths:list) -> (list, list, list):
     list_valid_paths = []
@@ -31,3 +38,4 @@ def get_valid_paths(list_img_paths:list) -> (list, list, list):
         except:
             list_errors.append(path)
     return list_valid_paths, list_rejected_paths, list_errors
+
